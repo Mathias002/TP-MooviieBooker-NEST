@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { MoviesApiService } from './movies-api.service';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Get movies')
 @Controller('movies')
@@ -10,7 +11,9 @@ export class MoviesApiController {
 @ApiOperation({ summary: 'Popular films of the moment' })
 @ApiResponse({ status: 200, description: 'Films successfully recovered' }) 
 @ApiResponse({ status: 401, description: 'Films recovery failure' }) 
+@ApiBearerAuth()
 @Get('/popular')
+@UseGuards(AuthGuard())
   async getPopularMovies() {
     const response = await this.moviesApiService.getPopularMovies();
     return response.results.map((movie) => ({

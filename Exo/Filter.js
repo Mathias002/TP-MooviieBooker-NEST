@@ -98,7 +98,7 @@ function Filter(Array, param){
 
         const ArrayIteration = JSON.stringify(Array[i])
 
-        if(ArrayIteration.includes(param)){
+        if(ArrayIteration.toLowerCase().includes(param.toLowerCase())){
     
             FilteredArray.push(ArrayIteration)
         }
@@ -108,4 +108,4 @@ function Filter(Array, param){
     
 }
 
-console.log(Filter(films, 'Drame'));
+console.log(Filter(films, 'avaTar'));

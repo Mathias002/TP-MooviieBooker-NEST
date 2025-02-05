@@ -8,16 +8,14 @@ import { User } from '../../auth/schemas/user.schemas';
 })
 export class Reservation {
 
-    //clean supr *
-
-    @Prop({ type: Date})
+    @Prop({ type: Date })
     dateSeance: Date;
 
-    @Prop({ type: Number})
+    @Prop({ type: Number })
     filmId: number;
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    user: User;
+    userInfos: User;
 
 }
 

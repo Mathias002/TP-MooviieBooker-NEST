@@ -1,20 +1,19 @@
-import { IsEmail, IsNotEmpty, IsString, IsDate } from '@nestjs/class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsNotEmpty } from '@nestjs/class-validator';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import { Date } from 'mongoose';
 import { User } from 'src/auth/schemas/user.schemas';
 
 export class ReservationDto {
 
-    @ApiProperty({ example: '23/03/2025', description: 'The date of the seance' })
+    @ApiProperty({ example: '2024-02-05 14:30', description: 'The date and hour of the seance' })
     @IsNotEmpty()
-    @IsDate()
+    @Transform(({ value }) => new Date(value))
     readonly dateSeance: Date;
 
-    @ApiProperty({ example: '12', description: 'The ID of the client concerned by the reservation' })
-    @IsNotEmpty()
-    @IsNumber()
+    @ApiHideProperty()
     readonly filmId: number;
 
-    @ApiProperty({ description: 'The client infos concerned by the reservation' })
-    readonly user: User;
+    @ApiHideProperty()
+    readonly userInfos: User;
 }

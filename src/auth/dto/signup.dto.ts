@@ -18,4 +18,9 @@ export class SignUpDto {
     @IsString()
     @MinLength(6)
     readonly password: string;
+
+    @ApiProperty({ example: 'User', description: 'User role, by default = User' })
+    @IsNotEmpty()
+    @IsString()
+    readonly roles: string;
 }

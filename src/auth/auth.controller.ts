@@ -1,9 +1,9 @@
-import { Controller, Body, Post, Get } from '@nestjs/common';
+import { Controller, Body, Post, Get, UseGuards, Request } from '@nestjs/common';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { sign } from 'crypto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -26,5 +26,14 @@ export class AuthController {
     @Post('/login')
     login(@Body() loginDto: LoginDto): Promise<{ token: string}> {
         return this.authService.login(loginDto);
+    }
+
+    @ApiOperation({ summary: 'Current user details' })
+    @ApiResponse({ status: 200, description: 'Successfuly get user infos' }) 
+    @ApiResponse({ status: 401, description: 'fail to get user infos' }) 
+    @UseGuards(AuthGuard())
+    @Get('/profile')
+    getProfile(@Request() req) {
+        return req.user;
     }
 }

@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { MoviesApiModule } from './movies-api/movies-api.module';
+import { ReservationModule } from './reservation/reservation.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { MoviesApiModule } from './movies-api/movies-api.module';
       }),
     }),
     AuthModule,
-    MoviesApiModule, 
+    MoviesApiModule,
+    ReservationModule, 
   ],
 })
 export class AppModule {}

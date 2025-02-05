@@ -17,23 +17,24 @@ export class AuthService {
     ) {}
 
 
-    async signUp(signUpDto: SignUpDto): Promise<{ token: string, name: string, email: string }>{
-        const { name, email, password } = signUpDto;
+    async signUp(signUpDto: SignUpDto): Promise<{ token: string, name: string, email: string, roles: string, userId: string }>{
+        const { name, email, password, roles } = signUpDto;
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await this.userModel.create({
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            roles
         });
 
         const token = this.jwtService.sign({ id: user._id })
 
-        return { token, name, email }
+        return { token, name, email, roles, userId: user._id.toString() }
     }
 
-    async login(loginDto: LoginDto): Promise<{ token: string }> {
+    async login(loginDto: LoginDto): Promise<{ token: string, userId: string }> {
         const { email, password } = loginDto;
 
         const user = await this.userModel.findOne({ email })
@@ -50,7 +51,6 @@ export class AuthService {
 
         const token = this.jwtService.sign({ id: user._id })
 
-        return { token }
-
+        return { token, userId: user._id.toString() }
     }
 }

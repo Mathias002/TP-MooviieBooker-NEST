@@ -7,7 +7,7 @@ const MovieCard = ({ movie, createReservation }) => {
 
   return (
     <div
-      onClick={() => navigate(`movies/movie/${movie.id}`)} // Redirection vers la page de détails
+      onClick={() => navigate(`./${movie.id}`)} // Redirection vers la page de détails
       className="max-w-sm rounded overflow-hidden shadow-lg bg-gray-800 text-white cursor-pointer transition-transform transform hover:scale-105"
     >
       <img className="w-full" src={movie.poster_url} alt={movie.title} />

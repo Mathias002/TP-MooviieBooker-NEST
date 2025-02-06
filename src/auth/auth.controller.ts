@@ -1,7 +1,7 @@
 import { Controller, Body, Post, Get, UseGuards, Request } from '@nestjs/common';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -32,6 +32,7 @@ export class AuthController {
     @ApiResponse({ status: 200, description: 'Successfuly get user infos' }) 
     @ApiResponse({ status: 401, description: 'fail to get user infos' }) 
     @UseGuards(AuthGuard())
+    @ApiBearerAuth()
     @Get('/profile')
     getProfile(@Request() req) {
         return req.user;

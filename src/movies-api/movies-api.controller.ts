@@ -34,6 +34,10 @@ export class MoviesApiController {
     return ConvertGenreId(FilteredResponse);
   }
 
+  @ApiOperation({ summary: 'Details of a film by his id' })
+  @ApiResponse({ status: 200, description: 'Film details successfully recovered' })
+  @ApiResponse({ status: 401, description: 'Film details recovery failure' })
+  @ApiBearerAuth()
   @Get('/:id')
   @UseGuards(AuthGuard())
   async getMovieById(@Param('id') id: string) {
@@ -64,8 +68,6 @@ export class MoviesApiController {
     return movieWithGenres[0]; // Renvoie l'objet film avec les genres convertis
   }
   
-
-
   @ApiOperation({ summary: 'Search among popular films' })
   @ApiResponse({ status: 200, description: 'The search was successfully completed' })
   @ApiResponse({ status: 401, description: 'The search has failed' })

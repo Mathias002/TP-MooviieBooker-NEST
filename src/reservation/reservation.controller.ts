@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { ReservationDto } from '../reservation/dto/reservation.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
@@ -32,7 +32,19 @@ export class ReservationController {
     @Get('/myReservation')
     @UseGuards(AuthGuard())
     async getReservationsByUserId() {
-        const userInfos = (this.request as any).user
+        const userInfos = (this.request as any).user._id
         return this.reservationService.getReservationsByUserId(userInfos._id);
     }
+
+    @ApiOperation({ summary: 'Delete a bookings with id' })
+    @ApiResponse({ status: 200, description: 'Successfuly delete booking' })
+    @ApiResponse({ status: 401, description: 'Failed to delete booking' })
+    @ApiBearerAuth()
+    @Delete('/myReservation/delete/:idReservation')
+    @UseGuards(AuthGuard())
+    async deleteReservation(@Param('idReservation') idReservation: string): Promise<{ message: string }> {
+        const userInfos = (this.request as any).user._id
+        return this.reservationService.deleteReservation(idReservation, userInfos._id);
+    }
+
 }

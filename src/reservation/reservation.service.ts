@@ -1,4 +1,4 @@
-import { ForbiddenException, Inject, Injectable, Request, Scope } from '@nestjs/common';
+import { ForbiddenException, Inject, Injectable, NotFoundException, Request, Scope } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Reservation } from './schemas/reservation.schemas';
 import { Model } from 'mongoose';
@@ -6,6 +6,7 @@ import { User } from 'src/auth/schemas/user.schemas';
 import { REQUEST } from '@nestjs/core';
 import { catchError, firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import * as moment from 'moment-timezone';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ReservationService {
@@ -91,5 +92,24 @@ export class ReservationService {
             throw new Error(`Erreur lors de la récupération des réservations: ${error.message}`);
         }
     }
+
+    async deleteReservation(reservationId: string, userId: string): Promise<{ message: string }> {
+        // Vérifie si la réservation existe
+        const reservation = await this.reservationModel.findById(reservationId);
+        if (!reservation) {
+            throw new NotFoundException("Reservation not found");
+        }
+    
+        // Supprime la réservation de la base de données
+        await this.reservationModel.findByIdAndDelete(reservationId);
+    
+        // Supprime la réservation de l'utilisateur
+        await this.userModel.findByIdAndUpdate(userId, {
+            $pull: { reservations: reservationId }
+        });
+    
+        return { message: "Reservation successfully deleted" };
+    }
+    
     
 }

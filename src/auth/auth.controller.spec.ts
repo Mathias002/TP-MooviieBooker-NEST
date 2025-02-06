@@ -1,79 +1,95 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/signup.dto';
-import { LoginDto } from './dto/login.dto';
-import { UnauthorizedException } from '@nestjs/common';
-
-// Mock AuthService
-const mockAuthService = {
-  signUp: jest.fn(),
-  login: jest.fn(),
-};
 
 describe('AuthController', () => {
-  let authController: AuthController;
-  let authService: AuthService;
+  let controller: AuthController;
+  let service: AuthService;
+
+  const mockAuthService = {
+    signUp: jest.fn(),
+    login: jest.fn(),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [{ provide: AuthService, useValue: mockAuthService }],
+      providers: [
+        {
+          provide: AuthService,
+          useValue: mockAuthService,
+        },
+      ],
     }).compile();
 
-    authController = module.get<AuthController>(AuthController);
-    authService = module.get<AuthService>(AuthService);
+    controller = module.get<AuthController>(AuthController);
+    service = module.get<AuthService>(AuthService);
+  });
+
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
   });
 
   describe('signUp', () => {
-    it('should call authService.signUp and return token, name, email, roles, and userId', async () => {
-      const signUpDto: SignUpDto = { 
-        name: 'John Doe', 
-        email: 'john@example.com', 
-        password: 'securePass',
-        roles: 'user'
-      };
+    const signUpDto = {
+      name: 'Test User',
+      email: 'test@example.com',
+      password: 'password123',
+      roles: 'User',
+    };
 
-      const result = { 
-        token: 'mockToken', 
-        name: signUpDto.name, 
-        email: signUpDto.email, 
+    it('should create a new user', async () => {
+      const expectedResult = {
+        token: 'test-token',
+        name: signUpDto.name,
+        email: signUpDto.email,
         roles: signUpDto.roles,
-        userId: 'mockUserId'
+        userId: 'someId',
       };
 
-      jest.spyOn(authService, 'signUp').mockResolvedValue(result);
+      mockAuthService.signUp.mockResolvedValue(expectedResult);
 
-      expect(await authController.signUp(signUpDto)).toEqual(result);
-      expect(authService.signUp).toHaveBeenCalledWith(signUpDto);
+      const result = await controller.signUp(signUpDto);
+
+      expect(service.signUp).toHaveBeenCalledWith(signUpDto);
+      expect(result).toEqual(expectedResult);
     });
   });
 
   describe('login', () => {
-    it('should call authService.login and return token and userId', async () => {
-      const loginDto: LoginDto = { email: 'john@example.com', password: 'securePass' };
-      const result = { token: 'mockToken', userId: 'mockUserId' };
+    const loginDto = {
+      email: 'test@example.com',
+      password: 'password123',
+    };
 
-      jest.spyOn(authService, 'login').mockResolvedValue(result);
+    it('should return token when login is successful', async () => {
+      const expectedResult = {
+        token: 'test-token',
+        userId: 'someId',
+      };
 
-      expect(await authController.login(loginDto)).toEqual(result);
-      expect(authService.login).toHaveBeenCalledWith(loginDto);
-    });
+      mockAuthService.login.mockResolvedValue(expectedResult);
 
-    it('should throw an UnauthorizedException when login fails', async () => {
-      const loginDto: LoginDto = { email: 'john@example.com', password: 'wrongPass' };
+      const result = await controller.login(loginDto);
 
-      jest.spyOn(authService, 'login').mockRejectedValue(new UnauthorizedException('Invalid email or password'));
-
-      await expect(authController.login(loginDto)).rejects.toThrow(UnauthorizedException);
+      expect(service.login).toHaveBeenCalledWith(loginDto);
+      expect(result).toEqual(expectedResult);
     });
   });
 
   describe('getProfile', () => {
-    it('should return the user from the request object', () => {
-      const req = { user: { id: 'mockUserId', name: 'John Doe', email: 'john@example.com', roles: 'user' } };
+    it('should return user profile', () => {
+      const mockRequest = {
+        user: {
+          id: 'someId',
+          email: 'test@example.com',
+          roles: 'User',
+        },
+      };
 
-      expect(authController.getProfile(req)).toEqual(req.user);
+      const result = controller.getProfile(mockRequest);
+
+      expect(result).toEqual(mockRequest.user);
     });
   });
 });

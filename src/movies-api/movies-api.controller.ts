@@ -1,4 +1,4 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, UseGuards } from '@nestjs/common';
 import { MoviesApiService } from './movies-api.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
@@ -33,6 +33,38 @@ export class MoviesApiController {
 
     return ConvertGenreId(FilteredResponse);
   }
+
+  @Get('/:id')
+  @UseGuards(AuthGuard())
+  async getMovieById(@Param('id') id: string) {
+    const response = await this.moviesApiService.getPopularMovies();
+    const movie = response.results.find((m) => m.id === parseInt(id));
+  
+    if (!movie) {
+      throw new NotFoundException('Film non trouvé');
+    }
+  
+    const formattedMovie = {
+      id: movie.id,
+      title: movie.title,
+      overview: movie.overview,
+      genres: movie.genre_ids, // On va convertir ça
+      original_title: movie.original_title,
+      original_language: movie.original_language,
+      release_date: movie.release_date,
+      popularity: movie.popularity,
+      vote_average: movie.vote_average,
+      vote_count: movie.vote_count,
+      poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+      backdrop_url: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+    };
+  
+    // Convertir les IDs de genres en noms
+    const movieWithGenres = await ConvertGenreId([formattedMovie]);
+    return movieWithGenres[0]; // Renvoie l'objet film avec les genres convertis
+  }
+  
+
 
   @ApiOperation({ summary: 'Search among popular films' })
   @ApiResponse({ status: 200, description: 'The search was successfully completed' })
@@ -79,7 +111,7 @@ export class MoviesApiController {
         ].join(' ').toLowerCase();
 
         if (searchableFields.includes(param.toLowerCase())) {
-          FilteredArray.push(ArrayIteration); // On garde l'objet et non sa version stringifiée
+          FilteredArray.push(ArrayIteration);
         }
       }
       return ConvertGenreId(FilteredArray);
@@ -91,7 +123,6 @@ export class MoviesApiController {
 
 async function ConvertGenreId(movies: any[]) {
   try {
-    // Récupérer les genres depuis l'API TMDB
     const genresResponse = await fetch(
       'https://api.themoviedb.org/3/genre/movie/list?language=en',
       {
@@ -117,6 +148,6 @@ async function ConvertGenreId(movies: any[]) {
     }));
   } catch (error) {
     console.error('Erreur lors de la conversion des genres:', error);
-    return movies; // Retourner les films sans conversion en cas d'erreur
+    return movies;
   }
 }

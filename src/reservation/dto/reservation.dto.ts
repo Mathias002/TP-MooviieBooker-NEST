@@ -2,7 +2,7 @@ import { IsNotEmpty } from '@nestjs/class-validator';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { Date } from 'mongoose';
-import { User } from 'src/auth/schemas/user.schemas';
+import { User } from '../../auth/schemas/user.schemas';
 import * as moment from 'moment-timezone';
 
 export class ReservationDto {

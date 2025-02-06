@@ -2,7 +2,7 @@ import { ForbiddenException, Inject, Injectable, NotFoundException, Request, Sco
 import { InjectModel } from '@nestjs/mongoose';
 import { Reservation } from './schemas/reservation.schemas';
 import { Model } from 'mongoose';
-import { User } from 'src/auth/schemas/user.schemas';
+import { User } from '../auth/schemas/user.schemas';
 import { REQUEST } from '@nestjs/core';
 import { catchError, firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
@@ -22,6 +22,9 @@ export class ReservationService {
     
     async createReservation(reservationModel: Reservation, filmId: number,): Promise<{ dateSeance: Date, filmId: number, userInfos: User}>{
         const { dateSeance } = reservationModel;
+
+        "2024-02-05 14:30"
+        "2024-02-05 15:30"
 
         const userInfos = (this.request as any).user
         const reservation = await this.reservationModel.create({

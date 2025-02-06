@@ -29,7 +29,7 @@ export class ReservationController {
     @ApiResponse({ status: 200, description: 'Successful booking recovery' })
     @ApiResponse({ status: 401, description: 'Reservation booking failed' })
     @ApiBearerAuth()
-    @Get('/myReservation')
+    @Get('/my_reservation')
     @UseGuards(AuthGuard())
     async getReservationsByUserId() {
         const userInfos = (this.request as any).user._id
@@ -40,7 +40,7 @@ export class ReservationController {
     @ApiResponse({ status: 200, description: 'Successfuly delete booking' })
     @ApiResponse({ status: 401, description: 'Failed to delete booking' })
     @ApiBearerAuth()
-    @Delete('/myReservation/delete/:idReservation')
+    @Delete('/my_reservation/delete/:idReservation')
     @UseGuards(AuthGuard())
     async deleteReservation(@Param('idReservation') idReservation: string): Promise<{ message: string }> {
         const userInfos = (this.request as any).user._id

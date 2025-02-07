@@ -9,13 +9,13 @@ const Navbar = () => {
     <nav id="navbar" className="bg-gray-900 text-white py-4 px-6 flex justify-between items-center shadow-lg">
       {/* LOGO & LIENS */}
       <div className="flex items-center space-x-6">
-        <Link to="/" className="text-xl font-bold hover:text-gray-400">
+        <Link className="text-xl font-bold hover:text-gray-400">
           🎬 MyMovies
         </Link>
         <Link to="/movies" className="hover:text-gray-400">
           Films
         </Link>
-        {token && <Link to="/reservations" className="hover:text-gray-400">Mes Réservations</Link>}
+        {token && <Link to="/reservation/my_reservation" className="hover:text-gray-400">Mes Réservations</Link>}
       </div>
 
       {/* Bulle de Profil */}

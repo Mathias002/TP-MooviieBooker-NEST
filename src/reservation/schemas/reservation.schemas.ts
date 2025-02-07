@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
-import mongoose, { Date } from 'mongoose';
+import mongoose from 'mongoose';
 import { User } from '../../auth/schemas/user.schemas';
 
 
@@ -8,8 +8,8 @@ import { User } from '../../auth/schemas/user.schemas';
 })
 export class Reservation {
 
-    @Prop({ type: Date })
-    dateSeance: Date;
+    @Prop({ type: String })
+    dateSeance: String;
 
     @Prop({ type: Number })
     filmId: number;

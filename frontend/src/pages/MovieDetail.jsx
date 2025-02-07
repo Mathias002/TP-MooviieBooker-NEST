@@ -20,8 +20,8 @@ function MovieDetail() {
       .catch((error) => console.error('Erreur:', error));
   }, [id]);
 
-  if (loading) return <p>Chargement...</p>;
-  if (!movie) return <p>Film introuvable</p>;
+  if (loading) return <p style={{color: 'white', fontWeight: 'bold'}}>Chargement...</p>;
+  if (!movie) return <p style={{color: 'white', fontWeight: 'bold'}}>Film introuvable</p>;
 
   return (
     <div className="movie-detail">

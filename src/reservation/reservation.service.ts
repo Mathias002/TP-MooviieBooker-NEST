@@ -20,12 +20,9 @@ export class ReservationService {
         @Inject(REQUEST) private readonly request: Request
     ) {}
     
-    async createReservation(reservationModel: Reservation, filmId: number,): Promise<{ dateSeance: Date, filmId: number, userInfos: User}>{
-        const { dateSeance } = reservationModel;
-
-        "2024-02-05 14:30"
-        "2024-02-05 15:30"
-
+    async createReservation(reservationModel: Reservation, filmId: number,): Promise<{ dateSeance: String, filmId: number, userInfos: User}>{
+        let { dateSeance } = reservationModel;
+        
         const userInfos = (this.request as any).user
         const reservation = await this.reservationModel.create({
             dateSeance,
@@ -41,7 +38,7 @@ export class ReservationService {
             { new: true }
         );
                 
-        return { dateSeance: dateSeance as any, filmId, userInfos}
+        return { dateSeance, filmId, userInfos}
     }
 
     async getReservationsByUserId(userId: string) {

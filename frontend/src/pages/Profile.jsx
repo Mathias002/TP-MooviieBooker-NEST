@@ -46,28 +46,30 @@ const Profile = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      {error && <div className="text-red-500 text-center">{error}</div>}
+    <div>
+      <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+        {error && <div className="text-red-500 text-center">{error}</div>}
 
-      {user ? (
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Profil Utilisateur</h2>
-          <p><strong>Nom :</strong> {user.name}</p>
-          <p><strong>Email :</strong> {user.email}</p>
-          <a className="text-red-500 hover:underline" href="/reservation/my_reservation">
-              Mes reservations
-          </a>
-          <br></br>
-          <button
-            onClick={handleLogout}
-            className="mt-6 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-          >
-            Déconnexion
-          </button>
-        </div>
-      ) : (
-        <p className="text-center">Chargement des informations...</p>
-      )}
+        {user ? (
+          <div className="text-center">
+            <h2 className="text-2xl font-bold mb-4">Profil Utilisateur</h2>
+            <p><strong>Nom :</strong> {user.name}</p>
+            <p><strong>Email :</strong> {user.email}</p>
+            <a className="text-red-500 hover:underline" href="/reservation/my_reservation">
+                Mes reservations
+            </a>
+            <br></br>
+            <button
+              onClick={handleLogout}
+              className="mt-6 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+              >
+              Déconnexion
+            </button>
+          </div>
+        ) : (
+          <p className="text-center" style={{color: 'white', fontWeight: 'bold'}}>Chargement des informations...</p>
+        )}
+      </div>
     </div>
   );
 };

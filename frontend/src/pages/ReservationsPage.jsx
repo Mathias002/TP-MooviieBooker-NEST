@@ -80,7 +80,7 @@ const ReservationsPage = () => {
       
       {userInfo ? (
         <div>
-          <h1 className="text-2xl font-bold text-center mb-6">
+          <h1 className="text-2xl font-bold text-center mb-6 text-white">
             Réservations de {userInfo.userName}
           </h1>
 
@@ -114,12 +114,12 @@ const ReservationsPage = () => {
                 </div>
               ))
             ) : (
-              <p>Aucune réservation trouvée.</p>
+              <p style={{color: 'white', fontWeight: 'bold'}}>Aucune réservation trouvée.</p>
             )}
           </div>
         </div>
       ) : (
-        <p>Chargement des informations...</p>
+        <p style={{color: 'white', fontWeight: 'bold'}}>Chargement des informations...</p>
       )}
     </div>
   );

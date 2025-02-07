@@ -5,7 +5,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nes
 import { AuthGuard } from '@nestjs/passport';
 import { REQUEST } from '@nestjs/core';
 
-@ApiTags('Create reservation')
+@ApiTags('Reservation management')
 @Controller('reservation')
 export class ReservationController {
 

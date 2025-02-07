@@ -12,7 +12,7 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:3000/auth/login", {
+      const response = await axios.post("https://tp-mooviiebooker-nest.onrender.com/auth/login", {
         email,
         password,
       });

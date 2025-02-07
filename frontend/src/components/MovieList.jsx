@@ -19,7 +19,7 @@ const MoviesList = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:3000/movies/popular/${param}`, {
+      const response = await fetch(`https://tp-mooviiebooker-nest.onrender.com/movies/popular/${param}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +79,7 @@ const MoviesList = () => {
     const dateSeanceFormatted = dateSeance + ":00";
 
     try {
-      const response = await fetch(`http://localhost:3000/reservation/${selectedMovieId}`, {
+      const response = await fetch(`https://tp-mooviiebooker-nest.onrender.com/reservation/${selectedMovieId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

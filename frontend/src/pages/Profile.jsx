@@ -16,7 +16,7 @@ const Profile = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:3000/auth/profile", {
+        const response = await fetch("https://tp-mooviiebooker-nest.onrender.com/auth/profile", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -7,7 +7,7 @@ function MovieDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/movies/${id}`, {
+    fetch(`https://tp-mooviiebooker-nest.onrender.com/movies/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },

@@ -16,7 +16,7 @@ const ReservationsPage = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:3000/reservation/my_reservation", {
+        const response = await fetch("https://tp-mooviiebooker-nest.onrender.com/reservation/my_reservation", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const ReservationsPage = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/reservation/my_reservation/delete/${idReservation}`, {
+      const response = await fetch(`https://tp-mooviiebooker-nest.onrender.com/reservation/my_reservation/delete/${idReservation}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

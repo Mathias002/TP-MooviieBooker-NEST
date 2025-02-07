@@ -8,6 +8,8 @@ const MoviesList = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [dateSeance, setDateSeance] = useState("");
   const [selectedMovieId, setSelectedMovieId] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const moviesPerPage = 8;
 
   const fetchFilteredMovies = async (param) => {
     try {
@@ -46,7 +48,13 @@ const MoviesList = () => {
     const value = event.target.value;
     setSearchTerm(value);
     fetchFilteredMovies(value);
+    setCurrentPage(1);
   };
+
+  const indexOfLastMovie = currentPage * moviesPerPage;
+  const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
+  const currentMovies = movies.slice(indexOfFirstMovie, indexOfLastMovie);
+  const totalPages = Math.ceil(movies.length / moviesPerPage);
 
   const displayPopUpDateReservation = (movieId) => {
     setSelectedMovieId(movieId);
@@ -114,14 +122,29 @@ const MoviesList = () => {
         />
       </div>
 
-      <div className="flex flex-wrap justify-center gap-4">
-        {movies.length > 0 ? (
-          movies.map((movie) => (
-            <MovieCard
-              key={movie.id}
-              movie={movie}
-              displayPopUpDateReservation={displayPopUpDateReservation}
-            />
+      {/* Pagination */}
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="mx-2 px-4 py-2 bg-gray-700 text-white rounded disabled:opacity-50"
+        >
+          Précédent
+        </button>
+        <span className="text-white mx-4">Page {currentPage} / {totalPages}</span>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="mx-2 px-4 py-2 bg-gray-700 text-white rounded disabled:opacity-50"
+        >
+          Suivant
+        </button>
+      </div>
+
+      <div className="flex flex-wrap justify-center gap-4 mt-6">
+        {currentMovies.length > 0 ? (
+          currentMovies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} displayPopUpDateReservation={displayPopUpDateReservation} />
           ))
         ) : (
           <p style={{ color: "white", fontWeight: "bold" }}>Aucun film trouvé.</p>

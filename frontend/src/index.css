@@ -18,6 +18,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.hover\:scale-105:hover{
+  --tw-scale-x: 1.02 !important;
+  --tw-scale-y: 1.02 !important;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

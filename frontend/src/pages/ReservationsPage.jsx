@@ -7,7 +7,6 @@ const ReservationsPage = () => {
   const [error, setError] = useState(""); // Pour gérer les erreurs
 
   useEffect(() => {
-    // Fonction pour récupérer les réservations de l'utilisateur
     const fetchReservations = async () => {
       const token = localStorage.getItem("token");
 
@@ -98,7 +97,7 @@ const ReservationsPage = () => {
                       <div className="ml-4">
                         <h2 className="text-xl font-bold">{reservation.filmDetails.title}</h2>
                         <p className="text-sm text-gray-500">
-                          Date de la séance: {new Date(reservation.dateSeance).toLocaleString()}
+                          Date de la séance: {reservation.dateSeance}
                         </p>
                       </div>
                     </div>

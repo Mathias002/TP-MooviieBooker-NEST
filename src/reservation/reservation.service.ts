@@ -20,26 +20,42 @@ export class ReservationService {
         @Inject(REQUEST) private readonly request: Request
     ) {}
     
-    async createReservation(reservationModel: Reservation, filmId: number,): Promise<{ dateSeance: String, filmId: number, userInfos: User}>{
+    async createReservation(reservationModel: Reservation, filmId: number): Promise<{ dateSeance: String, filmId: number, userInfos: User }> {
         let { dateSeance } = reservationModel;
-        
-        const userInfos = (this.request as any).user
+        const userInfos = (this.request as any).user;
+    
+        const [datePart, timePart] = dateSeance.split(" "); // "2024-02-23" et "18:45"
+        const [hours, minutes] = timePart.split(":").map(Number); // [18, 45]
+    
+        const timeBefore = `${String(hours - 2).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+        const timeAfter = `${String(hours + 2).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+    
+        const existingReservation = await this.reservationModel.findOne({
+            userInfos: userInfos._id,
+            dateSeance: { 
+                $regex: new RegExp(`^${datePart} (?:${timeBefore}|${timePart}|${timeAfter})`)
+            }
+        });
+    
+        if (existingReservation) {
+            throw new Error("Vous avez déjà une réservation dans un intervalle de 2 heures.");
+        }
+    
         const reservation = await this.reservationModel.create({
             dateSeance,
             filmId,
-            userInfos           
+            userInfos
         });
-
+    
         await this.userModel.findByIdAndUpdate(
             userInfos._id,
-            {
-                $push: { reservations: reservation._id }
-            },
+            { $push: { reservations: reservation._id } },
             { new: true }
         );
-                
-        return { dateSeance, filmId, userInfos}
+    
+        return { dateSeance, filmId, userInfos };
     }
+    
 
     async getReservationsByUserId(userId: string) {
         try {

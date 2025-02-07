@@ -1,99 +1,93 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Movie Reservation App
 
 ## Description
+Cette application permet de réserver des films. Elle récupère les informations des films via l'API TMDB et offre des fonctionnalités de gestion de réservations et d'authentification avec JWT. Le frontend est séparé de l'API et communique avec celle-ci pour afficher et gérer les films et les réservations.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Fonctionnalités principales
+- Consultation des films populaires.
+- Détails des films individuels.
+- Réservation de films avec possibilité de supprimer une réservation.
+- Authentification des utilisateurs pour accéder à des informations personnelles et gérer les réservations.
 
-## Project setup
+## Routes
 
-```bash
-$ npm install
-```
+### Routes publiques
 
-## Compile and run the project
+1. **POST** `/auth/login`
+   - Description : Permet à un utilisateur de se connecter et de récupérer un JWT.
+   - Paramètres : 
+     - `email` : Email de l'utilisateur.
+     - `password` : Mot de passe de l'utilisateur.
 
-```bash
-# development
-$ npm run start
+2. **POST** `/auth/signup`
+   - Description : Permet à un utilisateur de s'inscrire en créant un compte.
+   - Paramètres :
+     - `name` : nom de l'utilisateur.
+     - `email` : Email de l'utilisateur.
+     - `password` : Mot de passe de l'utilisateur.
+     - `roles` : Le role par défaut est USER.
 
-# watch mode
-$ npm run start:dev
+### Routes protégées (requièrent un JWT)
 
-# production mode
-$ npm run start:prod
-```
+1. **GET** `/movies/popular`
+   - Description : Récupère la liste des films populaires.
+   - Paramètres : Aucun.
+   
+2. **GET** `/movies/popular/{param}`
+   - Description : Récupère la liste des films populaires filtrés par un paramètre.
+   - Paramètres :
+     - `param`: Le paramètre de filtrage (par exemple, année, genre, etc.).
+   
+3. **GET** `/movies/{id}`
+   - Description : Récupère les détails d'un film spécifique par son `id`.
+   - Paramètres :
+     - `id`: L'ID du film.
+4. **GET** `/reservation/my_reservation`
+   - Description : Récupère les réservations en cours de l'utilisateur connecté.
+   - Paramètres : Aucun.
 
-## Run tests
+5. **DELETE** `/reservation/my_reservation/delete/{idReservation}`
+   - Description : Supprime une réservation par son `idReservation`.
+   - Paramètres :
+     - `idReservation`: L'ID de la réservation à supprimer.
 
-```bash
-# unit tests
-$ npm run test
+6. **GET** `/auth/profile`
+   - Description : Récupère le profil de l'utilisateur connecté.
+   - Paramètres : Aucun.
 
-# e2e tests
-$ npm run test:e2e
+## Documentation Swagger
+La documentation API est disponible à deux endroits :
 
-# test coverage
-$ npm run test:cov
-```
+- **En local** : [Swagger Documentation (localhost)](http://localhost:3000/api/docs#/).
+- **En ligne** : [Swagger Documentation (online)](https://tp-mooviiebooker-nest.onrender.com/api/docs).
 
-## Deployment
+## Frontend
+L'interface utilisateur est disponible sur [mooviie-booker](https://mooviie-booker.netlify.app).
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Tests Unitaire
+- La majorités des test fonctionent bien
+- Néanmoins les tests des **controllers.reservation** et **services.reservation** ne fonctionnent pas actuellement. Ils doivent être examinés et corrigés pour assurer une couverture correcte.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Profil utilisateur test
+   - Email : user@example.com
+   - Paramètres : password123
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+### Condition d'intervalle de réservation
+- La condition qui vérifie qu'il y a un intervalle minimum de deux heures avant de pouvoir réserver un film est codée dans la fonction `createReservation` du fichier **service.reservation**. Cependant, cette condition ne fonctionne pas comme prévu et nécessite une correction. Le mécanisme de validation doit être révisé pour garantir que la réservation ne peut pas être effectuée si moins de deux heures s'écoulent entre la réservation et la date actuelle.
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Installation et démarrage
 
-## Resources
+### Environnement de développement
+1. Clonez ce dépôt :
+   ```bash
+   git clone [repository-url](https://github.com/Mathias002/TP-MooviieBooker-NEST)
 
-Check out a few resources that may come in handy when working with NestJS:
+2. installer les dépendances :
+   npm install
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+3. Lancer le projet :
+   npm run start
 
-## Support
+3. Adresse de l'API en local :
+   L'API sera disponible à http://localhost:3000
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

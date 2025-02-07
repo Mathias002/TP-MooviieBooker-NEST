@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import SignUp from "./pages/Signup";
 import MoviesList from "./components/MovieList";
 import MyReservation from './pages/ReservationsPage';
 import MovieDetail from './pages/MovieDetail'; 
